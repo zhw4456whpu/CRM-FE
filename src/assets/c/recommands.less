@@ -1,0 +1,80 @@
+
+.prd-recommand{
+    width: 1200px;
+    margin:0px auto;
+    text-align: left;
+    overflow: hidden;
+
+    .current-date{
+        display: block;
+        height: 145px;
+        background: url('../../../static/i/home/clockbg.png') repeat;
+        position: relative;
+        color: #fff;
+        text-align: center;
+        z-index: 11;
+        padding-left: 0rem;
+        padding-right: 0rem;
+        float: left;
+
+        img{
+            position: absolute;
+            right: 15%;
+            width: 120px;
+            top: 15px;
+        }
+
+        p{
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            margin-top: -31px;
+            left: 12%;
+        }
+    }
+
+    .recommand-cat{
+        padding-left: 3px;
+
+        .info{
+            position: absolute;
+            left: -3px;
+            top: 20%;
+            z-index: 9;
+            border-left: 1px solid #e8e4de;
+            padding-left: 15px;
+            height: 60%;
+
+            h3{
+                line-height: 22px;
+                color: #000;
+            }
+
+            h4{
+                font-size: 14px;
+            }
+
+        }
+        .recommend-main{
+            height: 145px;
+            padding: 5px 0px 0px;
+
+            img{
+                transition: all .2s;
+                border: none;
+                width: 120px;
+                right: 5%;
+                position: absolute;
+                margin-right: 0px;
+                bottom: 10px;
+            }
+        }
+
+        .recommend-main:hover{
+            img{
+                margin-right:30px;
+            }
+        }
+    }
+
+}

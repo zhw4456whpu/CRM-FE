@@ -1,0 +1,95 @@
+.login{
+    width: 100%;
+    height: 100%;
+    background: url('../../../static/i/login/bg.png') no-repeat top left;
+    background-size: cover;
+    overflow: hidden;
+    position: absolute;
+    .login-layout{
+        width: 100%;
+        height: 100%;
+    }
+    .login-box{
+        width: 465px;
+        height: 400px;
+        background-color: white;
+        border-radius: 6px;
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%,-50%);        
+        .title{
+            font-family: PingFangSC-Medium;
+            color:rgba(19,194,124,1);
+            font-size: 24px;
+            font-weight: 500;
+            text-align: center;
+            height: 124px;
+            line-height: 124px;
+        }
+        .login-account,.login-pwd{
+            
+            margin: 0px 50px 0px 50px;
+            .ivu-input{
+                height: 44px;
+                line-height: 44px;
+            }
+        }
+        .valid-code{
+            margin: 0px 50px 0px 50px;
+            .valid-pic{
+                cursor: pointer;
+                text-align: left;
+                padding-left:10px;
+                img{
+                    width: 100%;
+                    height: 44px;
+                }
+            }
+            .ivu-input{
+                height: 44px;
+                line-height: 44px;
+            }
+        }
+        .login-links{
+            height: 32px;
+            line-height: 32px;
+        }
+        .remmber-pwd{
+            text-align: left;
+            margin: 0px 50px 20px 50px;
+            color: #142921;
+        }
+        .forget-pwd{
+            float: right;
+            text-align: right;
+        }
+        .register{
+            float: left;
+            text-align: left;
+        }
+        .register a{
+            width: 120px;
+            height: 28px;
+            text-align: left;
+        }
+        .login-btn button{
+            height: 44px;
+            color: #fff;
+            background-color: #13C27C;
+            cursor: pointer;
+            font-size: 16px;
+            vertical-align: middle;
+            width: calc(100% - 100px);
+            margin: 0px 50px 20px 50px;
+        }
+        #qrcode{
+            max-width: 300px;
+            max-height: 300px;
+            margin:0px auto;
+        }
+        #qrcode img{
+            margin:0px auto;
+        }
+    }
+}
