@@ -6,14 +6,12 @@ var $sql = require('./sql');//sql语句
 
 // 连接数据库
 var conn = mysql.createConnection(models.mysql);
-console.log("连接数据库conn:%o",conn);
 
 conn.connect((e,args)=>{
     console.log("连接数据库callback,e:%o, args：%o", e, args);
 });
 
 var jsonWrite = function(res, ret) {
-    console.log("jsonWrite res:%o", res);
     if(typeof ret === 'undefined') {
         res.json({
             code: '1',
