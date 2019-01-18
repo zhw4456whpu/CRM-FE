@@ -231,7 +231,7 @@ export default {
         }
     },
     mounted(){
-        this.topNav = this.menu.topNav;
+        this.topNav = this.menu.topNav || [];
         this.subMenus = this.menu.subMenus;
         let path = this.$route.path;
         this.curSubMenuAddress = path;

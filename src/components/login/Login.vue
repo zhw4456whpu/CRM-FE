@@ -49,30 +49,6 @@ export default {
         ChatBox
     },
     computed: {
-        allSensitiveWords: {
-            get(){
-                return this.$store.state.allSensitiveWords;
-            },
-            set(val){
-                this.$store.dispatch('setAllSensitiveWords', val);
-            }
-        },
-        servedTenant:{
-            get(){
-                return this.$store.state.servedTenant;
-            },
-            set(val){
-                this.$store.dispatch('setServedTenant', val);
-            }
-        },
-        userId: {
-            get(){
-                return this.$store.state.userId;
-            },
-            set(val){
-                this.$store.dispatch('setUserId', val);
-            }
-        },
         menu :{
             get(){
                 return this.$store.state.menu;
@@ -81,90 +57,23 @@ export default {
                 this.$store.dispatch('setMenu', val);
             }
         },
-        remember:{
-            get(){
-                return this.$store.state.remember;
-            },
-            set(val){
-                this.$store.dispatch('setRemember', val);
-            }
-        },
-        un(){
-            return this.$store.state.userName; 
-        },
-        pd(){
-            return this.$store.state.password; 
-        },
     },
     data(){
         return {
-            worker: null,
-            validPic: '',
+            remember: false,
             loginForm: {
                 userName: '',
                 curPwd: '',
                 validCode: ''
             },           
             ruleValidate: {
-                userName: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
+                userName: [{ required: true, message: '请输入登录账号', trigger: 'blur' }],
                 curPwd: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
                 validCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
             },              
         }
     },
     methods:{
-        runWebWork(){
-            let _this = this;
-            this.worker = this.$worker.run((fn) =>{
-                fn && fn();
-            }, [_this.querySensitiveWordListForPage()])
-                .then(res => { console.log(_this.allSensitiveWords);})
-                .catch(e => {
-                    this.worker = null;
-                })
-        },
-        /**获取所有敏感词 */
-        querySensitiveWordListForPage(){
-            let _this = this;
-            
-            let config = {
-                data: {},
-                headers: Headers.urlencoded
-            }            
-            company.querySensitiveWordListForPage(config).then(res =>{
-                if(res.code == '0'){
-                    let sensitiveWord = res.resultData.list.map((i,x) =>{
-                        sensitiveWord = i.sensitiveWord;
-                        _this.allSensitiveWords.push(sensitiveWord);
-                    });
-                } else{
-                    _this.$Message.warning(res.message);
-                }
-            },err => {
-                _this.$Message.error(err);
-            })
-        },
-        /**获取登陆人员所服务的租户信息 */
-        getServedTenant(){
-            let config = {
-                headers: Headers.json
-            };
-            Login.getServedTenant(config).then( res =>{
-                if(res.code == '0'){
-                    this.servedTenant = res.resultData;
-                    this.$router.push(
-                        {
-                            name: "KFPlatform"
-                        }
-                    )
-                }
-                else{
-                    this.$Message.warning(res.message);
-                }
-            },err=>{
-                this.$Message.error(err);
-            })
-        },
         /**登录 */
         login(){
             let config = {
@@ -175,7 +84,18 @@ export default {
                 headers: Headers.json
             }
             Login.login(config).then(res =>{
-                console.log("login res:%o",res);
+                if(res.code == '0'){
+                    if(res.data[0].user_pwd == this.loginForm.curPwd){
+                        debugger
+                        this.$router.push({
+                            path: '/contentmanage'
+                        })
+                    }
+                    else{
+                        this.$Message.warning('密码错误！')
+                    }
+                    
+                }
             })
         },
         //设置cookie
@@ -205,28 +125,9 @@ export default {
         clearCookie: function() {
             this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
         },                      
-        /**获取验证码 */
-        getValidCode(){
-            let config = {
-                headers: Headers.json
-            };
-            Login.getValidCode(config).then(res =>{
-                if(res.code == '0'){
-                    this.validPic = `data:image/png;base64,${res.resultData }`
-                }else{
-                    this.$Message.error(res.message || res.resultData);
-                }
-            }, err=>{
-                this.$Message.error(err);
-            })
-        }
+        
     },
     mounted(){
-        this.loginForm.userName = this.un;
-        this.loginForm.curPwd = this.pd;
-        this.getValidCode();
-        this.getCookie();
-        this.allSensitiveWords = [];
     }
 }
 </script>
