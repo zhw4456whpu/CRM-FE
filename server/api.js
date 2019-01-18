@@ -68,13 +68,68 @@ router.post('/addUser', (req, res) => {
         }        
         if (result) {
             jsonWrite(res, result);
-            for(var i = 0; i < result.length; i++){
-                console.log("请求回来！",result[i])
-                console.log("请求结果！",typeof result[i],result[i].userpsw);
-                if (result[i].userpsw == params.userpsw) {
-                    res.send("返回回来了！");
-                }
-            }
+            res.end('is over');
+        }
+    })
+});
+// 增加分类接口
+router.post('/addCategory', (req, res) => {
+    var sql = $sql.category.add;    
+    var params = req.body; 
+    console.log("sql",sql);
+    console.log("params",params);
+    conn.query(sql, [params.categoryName,params.categoryCode], function(err, result) {    
+        if (err) {       
+            console.log(err);
+        }        
+        if (result) {
+            jsonWrite(res, result);
+            res.end('is over');
+        }
+    })
+});
+// 查询分类接口
+router.get('/', (req, res, next) => {
+    var sql = $sql.category.queryAll;    
+    console.log("/ sql",sql);
+    
+    res.header("Access-Control-Allow-Origin", "*");
+    conn.query(sql, function(err, result) {    
+        if (err) {       
+            console.log(err);
+        }
+        if (result) {
+            jsonWrite(res, result);
+            res.end('is over');
+        }
+    })
+});
+// 查询分类接口
+router.get('/queryAll', (req, res, next) => {
+    var sql = $sql.category.queryAll;    
+    console.log("queryAll sql",sql);
+
+    res.header("Access-Control-Allow-Origin", "*");
+    conn.query(sql, function(err, result) {    
+        if (err) {
+            console.log(err);
+        }        
+        if (result) {
+            jsonWrite(res, result);
+            res.end('is over');
+        }
+    })
+});
+// 查询分类接口
+router.post('/queryAll', (req, res, next) => {
+    var sql = $sql.category.queryAll;    
+    console.log("post queryAll sql",sql);
+    conn.query(sql, function(err, result) {    
+        if (err) {       
+            console.log(err);
+        }        
+        if (result) {
+            jsonWrite(res, result);
             res.end('is over');
         }
     })
