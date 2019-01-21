@@ -1,6 +1,6 @@
 // node 后端服务器
 
-const userApi = require('./api');
+const api = require('./api');
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -16,7 +16,7 @@ app.get('*', function(req, res) {
     res.send(html)
 })
 // 后端api路由
-app.use('/api', userApi);
+app.use('/api', api);
 // 监听端口
 app.listen(8088);
 console.log('success listen at port:8088......');

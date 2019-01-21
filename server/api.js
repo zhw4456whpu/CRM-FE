@@ -6,10 +6,9 @@ var $sql = require('./sql');//sql语句
 
 // 连接数据库
 var conn = mysql.createConnection(models.mysql);
-console.log("连接数据库conn:%o",conn);
 
 conn.connect((e,args)=>{
-    console.log("连接数据库callback,e:%o, args：%o", e, args);
+    //console.log("连接数据库callback,e:%o, args：%o", e, args);
 });
 
 var jsonWrite = function(res, ret) {
@@ -28,7 +27,11 @@ var jsonWrite = function(res, ret) {
         });
     }
 };
-
+router.get('*', function (req, res){
+    console.log('404 handler..')
+    jsonWrite(res, result);
+    res.end('is over');
+});
 // 登录用户接口
 router.post('/login', (req, res) => {
     
