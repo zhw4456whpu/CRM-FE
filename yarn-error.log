@@ -1,20 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\mayn\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add strophe.js
+  /usr/local/bin/node /usr/local/bin/yarn add strophejs
 
 PATH: 
-  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Common Files\microsoft shared\TigerKin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\TortoiseSVN\bin;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Java\jdk1.8.0_191\bin;C:\Program Files\Java\jdk1.8.0_191\jre\bin;D:\Program Files\apache-maven-3.6.0\bin;"D:\Python27\;D:\Python27\Script\";C:\WINDOWS\SysWOW64\5097;C:\WINDOWS\SysWOW64\5097;C:\WINDOWS\SysWOW64;C:\Users\mayn\AppData\Local\Microsoft\WindowsApps;C:\Users\mayn\AppData\Roaming\npm;C:\Users\mayn\AppData\Local\Programs\Microsoft VS Code\bin;
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:export MONO_HOME=/Library/Frameworks/Mono.framework/Versions/5.0.1:export PATH=$PATH:$MONO_HOME/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:export MONO_HOME=/Library/Frameworks/Mono.framework/Versions/5.0.1:export PATH=$PATH:$MONO_HOME/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/zhenghaiwen/Library/gradle-4.3.1/bin:/bin:/Users/zhenghaiwen/Library/gradle-4.3.1/bin:/Users/zhenghaiwen/Library/gradle-4.3.1/bin
 
 Yarn version: 
   1.12.3
 
 Node version: 
-  10.11.0
+  8.9.3
 
 Platform: 
-  win32 x64
+  darwin x64
 
 Trace: 
-  Error: http://github.com/component/emitter/archive/1.0.1.tar.gz: ENOENT: no such file or directory, open 'C:\Users\mayn\AppData\Local\Yarn\Cache\v4\.tmp\c093b6de586a0ae2ebbab27ba3b833a5\.yarn-tarball.tgz'
+  Error: https://registry.npm.taobao.org/strophejs: Not found
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:65894:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:129018:22)
+      at emitTwo (events.js:126:13)
+      at Request.emit (events.js:214:7)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:129990:10)
+      at emitOne (events.js:116:13)
+      at Request.emit (events.js:211:7)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:129912:12)
+      at Object.onceWrapper (events.js:313:30)
+      at emitNone (events.js:111:20)
 
 npm manifest: 
   {
@@ -42,6 +52,7 @@ npm manifest:
       "express": "^4.16.4",
       "iview": "^2.13.0",
       "less": "^3.0.1",
+      "mysql": "^2.16.0",
       "qrcode": "^1.2.0",
       "qrcodejs2": "0.0.2",
       "request": "^2.88.0",

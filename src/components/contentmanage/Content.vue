@@ -2,7 +2,7 @@
     <Row class="content">
         <Row class="category">
             <Select v-model="curCategory" style="width:200px" @on-change="catChanged" :label-in-value="labelValue">
-                <Option v-for="item in categoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Option v-for="item in categoryList" :value="item.cat_code" :key="item.cat_id">{{ item.cat_name }}</Option>
             </Select>
             <Button type="success" @click="addCategory">新增分类</Button>
             <Modal v-model="showAddCategory" @on-ok="saveCategory" title="新增分类">
@@ -53,6 +53,7 @@ export default {
             Content.add(config).then(res =>{
                 if(res.code == '0'){
                     this.$Message.info('新增成功!');
+                    this.getCategoryList();
                 }
                 else{
                     this.$Message.warning(res.message);
@@ -70,10 +71,9 @@ export default {
                 headers: Headers.urlencoded
             }
             Content.queryAll(config).then(res =>{
-                debugger
                 if(res.code == '0'){
                     
-                    this.categoryList = res;
+                    this.categoryList = res.data;
                 }
                 else{
                     this.$Message.warning(res.message || '获取分类警告');
