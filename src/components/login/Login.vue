@@ -76,6 +76,9 @@ export default {
     methods:{
         /**登录 */
         login(){
+            var mdPwd = crypto.createHash('md5');
+            var encodePwd = mdPwd.update(this.loginForm.curPwd.toLowerCase()).digest('hex');
+            debugger;//a3b1198b88763059e2b46cb01e8213c9
             let config = {
                 data: {
                     username: this.loginForm.userName,
@@ -85,7 +88,7 @@ export default {
             }
             Login.login(config).then(res =>{
                 if(res.code == '0'){
-                    if(res.data[0].user_pwd == this.loginForm.curPwd){
+                    if(res.data[0].user_pwd == encodePwd){
                         debugger
                         this.$router.push({
                             path: '/contentmanage'

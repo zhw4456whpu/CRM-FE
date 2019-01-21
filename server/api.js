@@ -40,14 +40,16 @@ router.post('/login', (req, res) => {
     console.log("sql",sql);
     console.log("params",params);
     try{
+
         conn.query(sql, [params.username], function(err, result) {    
             if (err) {       
-                console.log("err :%o",err)
+                console.log("登录用户接口 err :%o",err)
             }        
             if (result) {
                 jsonWrite(res, result);
                 for(var i = 0; i < result.length; i++){
-                    console.log("请求回来result: %o！",result)
+                    console.log("请求回来result: %o！",result);
+                    
                     if (result[i].userpsw == params.userpsw) {
                         res.send("返回回来了！");
                     }
@@ -93,6 +95,22 @@ router.post('/addCategory', (req, res) => {
     })
 });
 // 查询分类接口
+router.get('/', (req, res, next) => {
+    var sql = $sql.category.queryAll;    
+    console.log("/ sql",sql);
+    
+    res.header("Access-Control-Allow-Origin", "*");
+    conn.query(sql, function(err, result) {    
+        if (err) {       
+            console.log(err);
+        }
+        if (result) {
+            jsonWrite(res, result);
+            res.end('is over');
+        }
+    })
+});
+// 查询分类接口
 router.get('/queryAll', (req, res, next) => {
     var sql = $sql.category.queryAll;    
     console.log("queryAll sql",sql);
@@ -102,22 +120,6 @@ router.get('/queryAll', (req, res, next) => {
         if (err) {
             console.log(err);
         }        
-        if (result) {
-            jsonWrite(res, result);
-            res.end('is over');
-        }
-    })
-});
-// 查询分类接口
-router.get('/**', (req, res, next) => {
-    var sql = $sql.category.queryAll;    
-    console.log("/ sql",sql);
-    
-    res.header("Access-Control-Allow-Origin", "*");
-    conn.query(sql, function(err, result) {    
-        if (err) {       
-            console.log(err);
-        }
         if (result) {
             jsonWrite(res, result);
             res.end('is over');
