@@ -74,6 +74,22 @@ export default {
         }
     },
     methods:{
+        /**获取分类 */
+        async getCategoryList(){
+            let config = {
+                data: {},
+                headers: Headers.urlencoded
+            },_this = this;
+            return await Login.queryAll(config).then(res =>{
+                if(res.code == '0'){
+                    _this.menu.topNav = res.data;
+                    _this.menu.subMenus = [];
+                }
+                return res;
+            }, err=>{
+                return err;
+            })
+        },
         /**登录 */
         login(){
             let config = {
@@ -82,20 +98,23 @@ export default {
                     userpsw: this.loginForm.curPwd
                 },
                 headers: Headers.json
-            }
+            },_this = this;
             Login.login(config).then(res =>{
                 if(res.code == '0'){
-                    if(res.data[0].user_pwd == this.loginForm.curPwd){
-                        debugger
-                        this.$router.push({
+                    _this.$Message.info(res.message);
+                    _this.getCategoryList().then( res=>{
+                        _this.$router.push({
                             path: '/contentmanage'
                         })
-                    }
-                    else{
-                        this.$Message.warning('密码错误！')
-                    }
-                    
+                    },err =>{
+                        _this.$Message.error('获取分类失败:%O', err);
+                    })
                 }
+                else{
+                    _this.$Message.warning(res.message);
+                }
+            }, err=>{
+                _this.$Message.error(err);
             })
         },
         //设置cookie
@@ -128,6 +147,7 @@ export default {
         
     },
     mounted(){
+        console.log("_this.menu:%o", this.menu);
     }
 }
 </script>
