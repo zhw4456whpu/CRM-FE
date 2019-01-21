@@ -23,6 +23,16 @@ import Content from '../../service/contentApi';
 import {Headers, Warning} from '../common/Consts.js'
 export default {
     name: 'Content',
+    computed: {
+        menu :{
+            get(){
+                return this.$store.state.menu;
+            },
+            set(val){
+                this.$store.dispatch('setMenu', val);
+            }
+        },
+    },
     data(){
         return {
             ruleInline: {
@@ -53,7 +63,6 @@ export default {
             Content.add(config).then(res =>{
                 if(res.code == '0'){
                     this.$Message.info('新增成功!');
-                    this.getCategoryList();
                 }
                 else{
                     this.$Message.warning(res.message);
@@ -64,27 +73,11 @@ export default {
         },
         /**分类改变 */
         catChanged(val){},
-        /**获取分类 */
-        getCategoryList(){
-            let config = {
-                data: {},
-                headers: Headers.urlencoded
-            }
-            Content.queryAll(config).then(res =>{
-                if(res.code == '0'){
-                    
-                    this.categoryList = res.data;
-                }
-                else{
-                    this.$Message.warning(res.message || '获取分类警告');
-                }
-            }, err=>{
-                this.$Message.error(err);
-            })
-        }
+        
     },
     mounted(){
-        this.getCategoryList();
+        this.categoryList = this.menu.topNav;
+        console.log("this.menu.topNav:%o", this.menu.topNav);
     }
 }
 </script>

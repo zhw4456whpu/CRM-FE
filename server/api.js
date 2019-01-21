@@ -46,12 +46,21 @@ router.post('/login', (req, res) => {
                 console.log("登录用户接口 err :%o",err)
             }        
             if (result) {
-                jsonWrite(res, result);
                 for(var i = 0; i < result.length; i++){
-                    console.log("请求回来result: %o！",result);
-                    
-                    if (result[i].userpsw == params.userpsw) {
-                        res.send("返回回来了！");
+                    console.log("登录用户接口result:%o", result);
+                    if (result[i].user_pwd == params.userpsw) {
+                        res.json({
+                            code: '0',
+                            message: '登录成功！',
+                            data: null
+                        });
+                    }
+                    else{
+                        res.json({
+                            code: '1',
+                            message: '密码错误！',
+                            data: null
+                        });
                     }
                 }
                 res.end('is over');

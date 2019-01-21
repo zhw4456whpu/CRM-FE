@@ -7,10 +7,10 @@
                         <div class="logo"></div>
                     </div>
                     <div class="layout-nav">
-                        <MenuItem v-for="(item,index) in topNav" :name="index+1" @click.native="selected(item.menuCode,item.menuAddress,index)" 
-                          :class="{'ivu-menu-item-active ivu-menu-item-selected':curTopNav.index == index}" :key="index">
+                        <MenuItem v-for="(item,index) in topNav" :name="index+1" @click.native="selected(item,index)" 
+                          :class="{'ivu-menu-item-active ivu-menu-item-selected':curTopNav.navIdx == index}" :key="index">
                             <Icon :type="item.icon"></Icon>
-                            {{item.menuName}}
+                            {{item.cat_name}}
                         </MenuItem>
                     </div>
                     <div class="login-info">
@@ -104,11 +104,10 @@ export default {
             reRePwd: '',
             pwdModal: false,
             curTopNav:{
-                menuCode: '',
-                index: 0
+                navCode: '',
+                navIdx: 0
             },
-            curSubMenus:[],
-            curSubMenuAddress: '',
+            curSubMenus: [],
             topNav: [],
             subMenus: []
         }
@@ -207,19 +206,9 @@ export default {
             })
         },
         //顶级菜单单击事件
-        selected(menuCode, menuAddress, index){
-            this.curTopNav.menuCode = menuCode;
-            this.curTopNav.index = index;
-
-            this.curSubMenus = this.subMenus.filter(item =>{
-                return item.parentCode == menuCode;
-            });
-            this.curSubMenuAddress = this.curSubMenus[0].menuAddress;
-            this.$router.push(
-                {
-                    path: menuAddress
-                }
-            )
+        selected(topNav, index){
+            this.curTopNav.navCode = topNav.cat_code;
+            this.curTopNav.navIdx = index;
         },
         goto(path,index){
             this.curSubMenuAddress = path;
@@ -232,30 +221,12 @@ export default {
     },
     mounted(){
         this.topNav = this.menu.topNav || [];
-        this.subMenus = this.menu.subMenus;
-        let path = this.$route.path;
-        this.curSubMenuAddress = path;
-        let hasTop = false;
+        console.log("this.topNav:%o", this.topNav);
+        this.subMenus = this.menu.subMenus || [];
         this.topNav.map((item,index) =>{
-            if(path.indexOf(item.menuAddress) > -1){
-                this.curSubMenus = this.subMenus.filter(sitem =>{
-                    return sitem.parentCode == item.menuCode;
-                });
-                this.curTopNav.index = index;
-                hasTop = true;
-            }
+            
         });
-        if(!hasTop){
-            this.topNav.map((item,index) =>{
-                if(index == 0){
-                    this.curSubMenus = this.subMenus.filter(sitem =>{
-                        return sitem.parentCode == item.menuCode;
-                    });
-                    this.curTopNav.index = index;
-                    this.selected(item.menuCode, item.menuAddress, index);
-                }
-            });
-        }
+        
     }
 }
 </script>
