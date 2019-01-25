@@ -18,10 +18,25 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/../../dist'));
 var ACCESS_CONTROLL_ALLOW_ORIGIN = true;
 
-conn.connect((e,args)=>{
-    //console.log("连接数据库callback,e:%o, args：%o", e, args);
+conn.connect((err,args)=>{
+    if(err){
+        console.log("连接数据库失败err:%o", err);
+    }
+    else{
+        console.log("连接数据库成功");
+    }
 });
 
+var closeConn = () =>{
+    conn.end( (err) =>{
+        if(err){
+            console.log("关闭数据库失败e:%o", err);
+        }
+        else{
+            console.log("关闭数据库成功");
+        }
+    })
+}
 var jsonWrite = function(res, ret) {
     if(typeof ret === 'undefined') {
         res.json({

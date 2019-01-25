@@ -4,3 +4,4 @@ node_modules/
 config/envConfig.js
 server/db.js
 config/index.js
+src/xmpp/xmpp.config.js
