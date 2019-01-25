@@ -14,7 +14,7 @@ module.exports = flow = function(temporaryFolder) {
   } catch (e) {}
 
   function cleanIdentifier(identifier) {
-    return identifier.replace(/[^0-9A-Za-z_-]/g, '');
+    return identifier!=undefined?identifier.replace(/[^0-9A-Za-z_-]/g, ''):'';
   }
 
   function getChunkFilename(chunkNumber, identifier) {
@@ -63,11 +63,12 @@ module.exports = flow = function(temporaryFolder) {
   //'found', filename, original_filename, identifier
   //'not_found', null, null, null
   $.get = function(req, callback) {
-    var chunkNumber = req.param('chunkNumber', 0);
-    var chunkSize = req.param('chunkSize', 0);
-    var totalSize = req.param('totalSize', 0);
-    var identifier = req.param('identifier', "");
-    var filename = req.param('filename', "");
+
+    var chunkNumber = req.params.chunkNumber = 0;
+    var chunkSize = req.params.chunkSize= 0;
+    var totalSize = req.params.totalSize= 0;
+    var identifier = req.params.identifier= "";
+    var filename = req.params.filename= "";
 
     if (validateRequest(chunkNumber, chunkSize, totalSize, identifier, filename) == 'valid') {
       var chunkFilename = getChunkFilename(chunkNumber, identifier);

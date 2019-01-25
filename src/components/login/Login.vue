@@ -42,24 +42,23 @@ import company from '../../service/companyApi';
 import crypto from 'crypto';
 import {Headers, Warning} from '../common/Consts.js'
 import * as menuConfig from '../../../config/menu.config.js'
-import ChatBox from '../common/ChatBox'
 export default {
-    name:'login',
-    components: {
-        ChatBox
-    },
+    name: 'Login',
     computed: {
-        menu :{
+        menu: {
             get(){
                 return this.$store.state.menu;
             },
             set(val){
+                debugger
                 this.$store.dispatch('setMenu', val);
             }
         },
     },
     data(){
         return {
+            topNav: [],
+            subMenus: [],
             remember: false,
             loginForm: {
                 userName: '',
@@ -80,10 +79,23 @@ export default {
                 data: {},
                 headers: Headers.urlencoded
             },_this = this;
-            return await Login.queryAll(config).then(res =>{
+            return await Login.queryAllCategory(config).then(res =>{
                 if(res.code == '0'){
-                    _this.menu.topNav = res.data;
-                    _this.menu.subMenus = [];
+                    _this.topNav= res.data
+                }
+                return res;
+            }, err=>{
+                return err;
+            })
+        },
+        async getAllChapters(){
+            let config = {
+                data: {},
+                headers: Headers.urlencoded
+            },_this = this;
+            return await Login.queryAllChapters(config).then(res =>{
+                if(res.code == '0'){
+                    _this.subMenus= res.data
                 }
                 return res;
             }, err=>{
@@ -105,8 +117,14 @@ export default {
                 if(res.code == '0'){
                     _this.$Message.info(res.message);
                     _this.getCategoryList().then( res=>{
-                        _this.$router.push({
-                            path: '/contentmanage'
+                        _this.getAllChapters().then(res =>{
+                            _this.menu = {
+                                topNav: _this.topNav,
+                                subMenus: _this.subMenus
+                            }
+                            _this.$router.push({
+                                path: '/contentmanage'
+                            })
                         })
                     },err =>{
                         _this.$Message.error('获取分类失败:%O', err);
@@ -149,7 +167,6 @@ export default {
         
     },
     mounted(){
-        console.log("_this.menu:%o", this.menu);
     }
 }
 </script>

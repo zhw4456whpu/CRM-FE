@@ -1,0 +1,41 @@
+<template>
+    <div class="detail">
+        <pre>
+            <Row v-html="content"></Row>
+        </pre>
+    </div>
+</template>
+<script>
+import Content from '../../service/contentApi';
+export default {
+    name: 'Detail',
+    data(){
+        return {
+            chapterId: '',
+            content: ''
+        }
+    },
+    methods: {
+        getChapterContent(){
+            let config = {
+                data:{
+                    chapterId: this.$route.query.chapterId
+                }
+            }
+            Content.queryChapterContent(config).then(res =>{
+                if(res.code == '0'){
+                    this.content = res.data[0].chapter_content;
+                }
+                else{
+                    this.$Message.warning(res.message);
+                }
+            }, err =>{
+                this.$Message.error(err);
+            })
+        }
+    },
+    mounted(){
+        this.getChapterContent();
+    }
+}
+</script>

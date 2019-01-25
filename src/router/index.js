@@ -7,6 +7,7 @@ import Index from '@/components/home/Index'
 
 /**内容管理 */
 import Content from '@/components/contentmanage/Content'
+import Detail from '@/components/contentmanage/Detail'
 
 Vue.use(Router)
 
@@ -39,6 +40,11 @@ export default new Router({
           path: 'content',
           name: 'Content',
           component: Content
+        },
+        {
+          path: 'detail',
+          name: 'Detail',
+          component: Detail
         },
       ]
     },
