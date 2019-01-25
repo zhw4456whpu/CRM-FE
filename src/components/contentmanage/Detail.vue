@@ -9,9 +9,18 @@
 import Content from '../../service/contentApi';
 export default {
     name: 'Detail',
+    computed: {
+        chapterId(){
+            return  this.$route.query.chapterId;
+        }
+    },
+    watch:{
+        chapterId(newVal, oldVal){
+            this.getChapterContent();
+        }
+    },
     data(){
         return {
-            chapterId: '',
             content: ''
         }
     },
@@ -19,12 +28,12 @@ export default {
         getChapterContent(){
             let config = {
                 data:{
-                    chapterId: this.$route.query.chapterId
+                    chapterId: this.chapterId
                 }
             }
             Content.queryChapterContent(config).then(res =>{
                 if(res.code == '0'){
-                    this.content = res.data[0].chapter_content;
+                    this.content = res.data[0]?res.data[0].chapter_content:'';
                 }
                 else{
                     this.$Message.warning(res.message);
