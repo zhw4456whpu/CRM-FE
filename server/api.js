@@ -46,9 +46,10 @@ router.post('/login', (req, res) => {
     console.log("sql",sql);
     console.log("params",params);
     try{
+
         conn.query(sql, [params.username], function(err, result) {    
             if (err) {       
-                console.log("err :%o",err)
+                console.log("登录用户接口 err :%o",err)
             }        
             if (result) {
                 for(var i = 0; i < result.length; i++){
@@ -117,7 +118,7 @@ router.post('/addChapter', (req, res) => {
     conn.query(sql, [params.chapTitle, params.chapContent, params.curCategory], function(err, result) {    
         if (err) {       
             console.log(err);
-        }        
+        }
         if (result) {
             jsonWrite(res, result);
             res.end('is over');
@@ -169,13 +170,13 @@ router.get('/download/:identifier', function(req, res) {
 // 查询分类接口
 router.get('/queryAllCategory', (req, res, next) => {
     var sql = $sql.category.queryAll;    
-    console.log("/ sql",sql);
-    
+    console.log("queryAll sql",sql);
+
     res.header("Access-Control-Allow-Origin", "*");
     conn.query(sql, function(err, result) {    
-        if (err) {       
+        if (err) {
             console.log(err);
-        }
+        }        
         if (result) {
             jsonWrite(res, result);
             res.end('is over');

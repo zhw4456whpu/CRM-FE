@@ -104,6 +104,9 @@ export default {
         },
         /**登录 */
         login(){
+            var mdPwd = crypto.createHash('md5');
+            var encodePwd = mdPwd.update(this.loginForm.curPwd.toLowerCase()).digest('hex');
+            debugger;//a3b1198b88763059e2b46cb01e8213c9
             let config = {
                 data: {
                     username: this.loginForm.userName,

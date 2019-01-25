@@ -5,6 +5,7 @@ module.exports = {
         user: 'root',
         password: 'zhw11235813',
         database: 'crm_fe',
-        port: '3306'
+        port: '3306',
+        useConnectionPooling: true
     }
 }
