@@ -65,15 +65,15 @@
                                 </template>
                                 <template>
                                     <MenuItem v-for="(sitem,sindex) in item.children" :name="sitem.name" :key="sindex"
-                                    @click.native="goto(sitem.menuAddress,sindex)" :class="{'ivu-menu-item-active ivu-menu-item-selected':curSubMenuAddress == item.menuAddress}">{{sitem.name}}</MenuItem>
+                                    @click.native="goto(sitem,sindex)" :class="{'ivu-menu-item-active ivu-menu-item-selected':curSubMenuAddress == item.menuAddress}">{{sitem.name}}</MenuItem>
                                 </template>
                             </template>
                             <template v-else>
                                 <template slot="title">
-                                    <span @click="goto(item.menuAddress,index)" class="submenu-title"
-                                        :class="{'ivu-menu-item-active ivu-menu-item-selected':curSubMenuAddress == item.menuAddress}">
+                                    <span @click="goto(item,index)" class="submenu-title"
+                                        :class="{'ivu-menu-item-active ivu-menu-item-selected':curSubMenuAddress == item.chapter_id}">
                                         <Icon :type="item.icon"></Icon>
-                                        {{item.menuName}}
+                                        {{item.chapter_title}}
                                     </span>
                                 </template>
                             </template>
@@ -81,8 +81,9 @@
                     </Menu>
                 </Sider>
                 <Layout :style="{padding: '0 20px 24px'}">
-                    <Content :style="{minHeight: '280px'}">
+                    <Content :style="{minHeight: '280px'}" class="lcontent">
                         <router-view />
+                        <!-- <Row v-html="curChapterContent"></Row> -->
                     </Content>
                 </Layout>
             </Layout>
@@ -98,6 +99,7 @@ export default {
     name: 'Index',
     data(){
         return {
+            // curChapterContent: '',
             showMask: false,
             srcPwd: '',
             rePwd: '',
@@ -108,6 +110,7 @@ export default {
                 navIdx: 0
             },
             curSubMenus: [],
+            curSubMenuAddress: '',
             topNav: [],
             subMenus: []
         }
@@ -209,22 +212,36 @@ export default {
         selected(topNav, index){
             this.curTopNav.navCode = topNav.cat_code;
             this.curTopNav.navIdx = index;
-        },
-        goto(path,index){
-            this.curSubMenuAddress = path;
+            
+            this.curSubMenus = this.menu.subMenus.filter((i,x) =>{
+                return i.cat_code == this.curTopNav.navCode;
+            });
             this.$router.push(
                 {
-                    path: path,
+                    path: 'content'
                 }
             )
+        },
+        goto(item,index){
+            this.curSubMenuAddress = item.chapter_id;
+            this.$router.push(
+                {
+                    path: 'detail',
+                    query: {
+                        chapterId: item.chapter_id
+                    }
+                }
+            )
+            // this.curChapterContent = item.chapter_content;
         }
     },
     mounted(){
         this.topNav = this.menu.topNav || [];
-        console.log("this.topNav:%o", this.topNav);
         this.subMenus = this.menu.subMenus || [];
         this.topNav.map((item,index) =>{
-            
+            if(index == 0){
+                this.selected(item, index);
+            }
         });
         
     }
@@ -260,6 +277,11 @@ export default {
     
 }
 .layout{
+    .lcontent{
+        text-align: left;
+        background-color: white;
+        padding:20px;
+    }
     .ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item:hover{
         color: #13c27c;
     }

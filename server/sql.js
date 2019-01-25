@@ -8,7 +8,13 @@ var sqlMap = {
     category: {
         queryAll: 'SELECT * FROM crm_category;',
         add: 'insert into crm_category(cat_name, cat_code) values ( ?, ?);'
-    }
+    },
+    chapter: {
+        queryAll: 'SELECT * FROM crm_chapter;',
+        queryOne: 'SELECT * FROM crm_chapter where chapter_id = ?;',
+        add: 'insert into crm_chapter(chapter_title, chapter_content, cat_code) values ( ?, ?, ?);'
+    },
+    
 }
 
 module.exports = sqlMap;
