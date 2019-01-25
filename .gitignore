@@ -1,3 +1,6 @@
 .svn/
 .vscode/
 node_modules/
+config/envConfig.js
+server/db.js
+config/index.js

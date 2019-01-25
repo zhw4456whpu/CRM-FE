@@ -3,7 +3,7 @@
         <Form ref="formValidate" :model="loginForm" :rules="ruleValidate">
             <Row type="flex" justify="center" align="middle" class="login-layout">
                 <Row class="login-box">
-                    <Row class="title">胚豆运营管理平台</Row>
+                    <Row class="title">胚豆编码规范管理</Row>
                     <Row class="login-account">
                         <Form-item prop="userName">
                                 <Input v-model="loginForm.userName"   placeholder="请输入商家账号"  @keyup.native.enter="login"></Input>
@@ -94,7 +94,6 @@ export default {
         login(){
             var mdPwd = crypto.createHash('md5');
             var encodePwd = mdPwd.update(this.loginForm.curPwd.toLowerCase()).digest('hex');
-            debugger;//a3b1198b88763059e2b46cb01e8213c9
             let config = {
                 data: {
                     username: this.loginForm.userName,

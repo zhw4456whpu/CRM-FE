@@ -1,7 +1,7 @@
 // 数据库连接配置
 module.exports = {
     mysql: {
-        host: 'localhost',
+        host: '192.168.1.10',
         user: 'root',
         password: 'zhw11235813',
         database: 'crm_fe',
