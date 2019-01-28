@@ -3,10 +3,12 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var $sql = require('./sql');//sql语句
+var fs = require('fs'),path = require('path'),util = require('util');
 /******************上传组件 */
+var formidable = require('formidable');
 process.env.TMPDIR = 'tmp'; // to avoid the EXDEV rename error, see http://stackoverflow.com/q/21071303/76173
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
+// var multipart = require('connect-multiparty');
+// var multipartMiddleware = multipart();
 var uploader = require('../build/uploader-node.js')('tmp');
 
 // 连接数据库
@@ -27,16 +29,6 @@ conn.connect((err,args)=>{
     }
 });
 
-var closeConn = () =>{
-    conn.end( (err) =>{
-        if(err){
-            console.log("关闭数据库失败e:%o", err);
-        }
-        else{
-            console.log("关闭数据库成功");
-        }
-    })
-}
 var jsonWrite = function(res, ret) {
     if(typeof ret === 'undefined') {
         res.json({
@@ -141,26 +133,40 @@ router.post('/addChapter', (req, res) => {
     })
 });
 // 上传文件接口
-router.post('/upload*', multipartMiddleware, function(req, res) {
-    uploader.post(req, function(status, filename, original_filename, identifier) {
-        if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "content-type")
-        }
-        setTimeout(function () {
-            res.send(status);
-        }, 500);
+// router.post('/upload*', multipartMiddleware, function(req, res) {
+    
+//     req.body.chunkSize = req.files.upfile.size;
+//     req.body.totalSize = req.files.upfile.size;
+//     req.body.chunkNumber = 1;
+//     req.body.identifier = req.files.upfile.name;
+//     req.body.filename = req.files.upfile.name;
+//     uploader.post(req, function(status, filename, original_filename, identifier) {
+        
+//         if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
+//             res.header("Access-Control-Allow-Origin", "*");
+//             res.header("Access-Control-Allow-Headers", "content-type")
+//         }
+//         setTimeout(function () {
+//             res.send(status);
+//         }, 500);
+//     });
+// }),
+// 上传文件接口
+router.post('/upload**', (req, res) => {
+    var timestamp = Date.parse(new Date());
+    var form = new formidable.IncomingForm();
+    form.uploadDir = 'tmp'; //增加的的代码
+    form.parse(req, function(error, fields, files) {
+        var fileName = timestamp + '_' + files.upfile.name;
+        fs.renameSync(files.upfile.path, '../static/upfile/' + fileName, (err) =>{
+            console.log("fs.renameSync err:%o", err);
+        });
+        res.json({
+            state: 'SUCCESS',
+            url: '../static/upfile/' + fileName
+        });
+        res.end("is over!");
     });
-}),
-router.options('/upload', function(req, res){
-    console.log('OPTIONS');
-    if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "content-type")
-        res.header("Content-Type" , "text/html");
-
-    }
-    res.status(200).send();
 }),
 router.get('/upload', function(req, res) {
     uploader.get(req, function(status, filename, original_filename, identifier) {
@@ -172,9 +178,11 @@ router.get('/upload', function(req, res) {
         res.header("Content-Type" , "text/html");
         //res.send(status);//.status(status == 'found' ? 200 : 204)
         res.json({
-            code: '0',
-            message: '上传接口连接成功！',
-            data: null
+            "imageUrl": "http://localhost/api/upload?action=uploadimage",
+            "imagePath": "/server/tmp/",
+            "imageFieldName": "upfile",
+            "imageMaxSize": 2048,
+            "imageAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"]
         });
         res.end('is over');
     });

@@ -24450,8 +24450,7 @@ UE.plugin.register('simpleupload', function (){
             var iframe = btnIframeDoc.getElementById('edui_iframe_' + timestrap);
 
             domUtils.on(input, 'change', function(){
-                console.log("input, 'change' value:%s", input.value);
-                debugger
+                
                 if(!input.value) return;
                 var loadingId = 'loading_' + (+new Date()).toString(36);
                 var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
@@ -24469,6 +24468,7 @@ UE.plugin.register('simpleupload', function (){
                             result = body.innerText || body.textContent || '';
                         json = (new Function("return " + result))();
                         link = me.options.imageUrlPrefix + json.url;
+                        console.log("imageUrlPrefix:%s", me.options.imageUrlPrefix);
                         if(json.state == 'SUCCESS' && json.url) {
                             loader = me.document.getElementById(loadingId);
                             loader.setAttribute('src', link);
