@@ -17,7 +17,7 @@ module.exports = {
     },
     development: {
         target: 'http://192.168.1.12:9090',
-        host: '192.168.1.10',
+        host: 'localhost',
         port: 8080,
         appkey: '1150181010228220#peidou-dev',
         appName: 'peidou-dev',
@@ -26,7 +26,7 @@ module.exports = {
     },
     private: {
         target: 'http://192.168.1.19:8080',
-        host: '192.168.1.10',
+        host: 'localhost',
         port: 8080,
         appkey: '1150181010228220#peidou-dev',
         appName: 'peidou-dev',
