@@ -40,6 +40,14 @@ export default {
         Ueditor
     },
     computed: {
+        userName: {
+            get(){
+                return this.$store.state.userName;
+            },
+            set(val){
+                this.$store.dispatch('setUserName', val);
+            }
+        },
         menu :{
             get(){
                 return this.$store.state.menu;
@@ -60,7 +68,9 @@ export default {
             formItem: {
                 chapTitle: '',
                 curCategory: '',
-                chapContent: ''
+                chapContent: '',
+                time: '',
+                writer: ''
             },
             ruleInline: {
                 categoryName: [{ required: true, message: '请输入分类账号', trigger: 'blur' }],
@@ -124,6 +134,7 @@ export default {
         },
         /**保存文章 */
         saveChapter(){
+            this.formItem.writer = this.userName;
             let config = {
                 data: {...this.formItem},
                 headers: Headers.json

@@ -50,7 +50,6 @@ export default {
                 return this.$store.state.menu;
             },
             set(val){
-                debugger
                 this.$store.dispatch('setMenu', val);
             }
         },

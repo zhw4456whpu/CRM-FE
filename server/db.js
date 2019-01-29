@@ -3,7 +3,7 @@ module.exports = {
     mysql: {
         host: 'localhost',
         user: 'root',
-        password: '123456',
+        password: 'zhw11235813',
         database: 'crm_fe',
         port: '3306',
         useConnectionPooling: true

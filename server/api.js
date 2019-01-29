@@ -130,7 +130,7 @@ router.post('/addChapter', (req, res) => {
     var params = req.body; 
     console.log("sql",sql);
     console.log("params",params);
-    conn.query(sql, [params.chapTitle, params.chapContent, params.curCategory], function(err, result) {    
+    conn.query(sql, [params.chapTitle, params.writer, params.chapContent, params.curCategory], function(err, result) {    
         if (err) {       
             console.log(err);
         }

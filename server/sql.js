@@ -12,7 +12,7 @@ var sqlMap = {
     chapter: {
         queryAll: 'SELECT * FROM crm_chapter;',
         queryOne: 'SELECT * FROM crm_chapter where chapter_id = ?;',
-        add: 'insert into crm_chapter(chapter_title, chapter_content, cat_code) values ( ?, ?, ?);'
+        add: 'insert into crm_chapter(chapter_title, chapter_writer, chapter_content, cat_code) values ( ?, ?, ?, ?);'
     },
     
 }
