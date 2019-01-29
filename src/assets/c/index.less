@@ -1,26 +1,26 @@
 .layout{
     position: relative;
     overflow: hidden;
+    .ivu-layout-header{
+        height: 80px;
+        line-height: 100px;
+        padding: 0px;
+        background: white;
+        color: #37CCC5;
+    }
+    .ivu-layout-sider{
+        background: #37CCC5;
+        color: white;
+    }
+    .ivu-menu-light{
+        background: #37CCC5;
+    }
+    .ivu-menu{
+        color: white;
+    }
+    
 }
-.layout-logo{
-    width: 300px;/*212px;*/
-    height: 100px;/*36px;*/
-    background: #13C27C;
-    float: left;
-    position: relative;
-}
-.logo{
-    width: 300px;
-    height: 42px;
-    background : url('../../../static/i/home/index/logo.png');
-    background-size: cover;
-    top: 32px;
-    position: relative;
-}
-.layout-nav{
-    margin: 0 auto;
-    margin-left: 450px;
-}
+
 .login-info{
     width: auto;
     height: 100px;
@@ -51,12 +51,7 @@
         background-color: white;
     }
 }
-.ivu-layout-header{
-    height: 100px;
-    line-height: 100px;
-    background: #13C27C;
-    padding: 0px;
-}
+
 .ivu-menu-dark{
     background: white;
 }
@@ -78,15 +73,16 @@
     margin: 0 20px;
     font-size: 16px;
 }
-.ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu){
-    border-right:none;
-    border-left: 4px solid #13C27C;
-    background: rgba(240,250,246,1);
-    color: #13C27C;
+.submenu.ivu-menu-opened
+{
+    .ivu-menu-submenu-title{
+        border-right: none;
+        border-left: 4px solid white;
+        background: #3DE0D8;
+        color: white;
+    }
 }
+
 .ivu-menu.ivu-menu-light.ivu-menu-vertical::after{
     width: 0px;
-}
-.ivu-layout.ivu-layout-has-sider{
-    margin-top: 20px;
 }

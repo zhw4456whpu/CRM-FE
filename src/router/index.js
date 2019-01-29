@@ -39,6 +39,9 @@ export default new Router({
         {
           path: 'content',
           name: 'Content',
+          meta: {
+            requireAuth: true
+          },
           component: Content
         },
         {

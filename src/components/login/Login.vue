@@ -14,16 +14,7 @@
                             <Input v-model="loginForm.curPwd"  type="password" placeholder="请输入密码" @keyup.native.enter="login"></Input>
                         </Form-item>
                     </Row>
-                    <!-- <Row class="valid-code">
-                        <Col span="12">
-                            <Form-item prop="validCode">
-                                <Input v-model="loginForm.validCode" placeholder="请输入验证码" @keyup.native.enter="login"></Input>
-                            </Form-item>
-                        </Col>
-                        <Col span="12" class="valid-pic" @click.native="getValidCode">
-                            <img :src="validPic" />
-                        </Col>
-                    </Row> -->
+                    
                     <Row class="remmber-pwd">
                         <Checkbox v-model="remember">记住密码</Checkbox>
                     </Row>
@@ -41,23 +32,11 @@ import Login from '../../service/loginApi';
 import company from '../../service/companyApi';
 import crypto from 'crypto';
 import {Headers, Warning} from '../common/Consts.js'
-import * as menuConfig from '../../../config/menu.config.js'
+
 export default {
     name: 'Login',
-    computed: {
-        menu: {
-            get(){
-                return this.$store.state.menu;
-            },
-            set(val){
-                this.$store.dispatch('setMenu', val);
-            }
-        },
-    },
     data(){
         return {
-            topNav: [],
-            subMenus: [],
             remember: false,
             loginForm: {
                 userName: '',
@@ -71,36 +50,25 @@ export default {
             },              
         }
     },
+    computed: {
+        userName: {
+            get(){
+                return this.$store.state.userName;
+            },
+            set(val){
+                this.$store.dispatch('setUserName', val)
+            }
+        },
+        accessToken: {
+            get(){
+                return this.$store.state.accessToken;
+            },
+            set() {
+                this.$store.dispatch('setAccessToken', val);
+            }
+        }
+    },
     methods:{
-        /**获取分类 */
-        async getCategoryList(){
-            let config = {
-                data: {},
-                headers: Headers.urlencoded
-            },_this = this;
-            return await Login.queryAllCategory(config).then(res =>{
-                if(res.code == '0'){
-                    _this.topNav= res.data
-                }
-                return res;
-            }, err=>{
-                return err;
-            })
-        },
-        async getAllChapters(){
-            let config = {
-                data: {},
-                headers: Headers.urlencoded
-            },_this = this;
-            return await Login.queryAllChapters(config).then(res =>{
-                if(res.code == '0'){
-                    _this.subMenus= res.data
-                }
-                return res;
-            }, err=>{
-                return err;
-            })
-        },
         /**登录 */
         login(){
             var mdPwd = crypto.createHash('md5');
@@ -115,22 +83,15 @@ export default {
             Login.login(config).then(res =>{
                 if(res.code == '0'){
                     _this.$Message.info(res.message);
-                    _this.getCategoryList().then( res=>{
-                        _this.getAllChapters().then(res =>{
-                            _this.menu = {
-                                topNav: _this.topNav,
-                                subMenus: _this.subMenus
-                            }
-                            _this.$router.push({
-                                path: '/contentmanage'
-                            })
-                        })
-                    },err =>{
-                        _this.$Message.error('获取分类失败:%O', err);
+                    _this.$store.dispatch('setAccessToken', res.message);
+                    _this.$store.dispatch('setUserName', this.loginForm.userName);
+                    _this.$router.push({
+                        path: '/contentmanage',
+
                     })
                 }
                 else{
-                    _this.$Message.warning(res.message);
+                    _this.$Message.warning(res.message || '登录失败！');
                 }
             }, err=>{
                 _this.$Message.error(err);

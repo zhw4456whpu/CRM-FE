@@ -286,3 +286,13 @@ export const receiveMessageTpl = (time, name, logo, content) => {
         </div>
     </div>`
 }
+
+export const menuIcons = {
+    kfgzt : 'ionic',
+    qxgl : 'arrow-up-a',
+    xtsz : 'arrow-shrink',
+    qdgl: 'log-in',
+    kfgl : 'ionic',
+    sjtj : 'arrow-up-a',
+    khzx : 'arrow-shrink'
+}

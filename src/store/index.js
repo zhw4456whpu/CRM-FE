@@ -126,7 +126,6 @@ export default new Vuex.Store({
             return state.servedTenant;
         },
         setMenu: (state, menu) =>{
-            console.log("store state:%o, setMenu:%o", state, menu);
             state.menu = menu;
         },
         getMenu: state =>{
@@ -274,7 +273,6 @@ export default new Vuex.Store({
         },
         /**设置 菜单 */
         setMenu: ({ commit }, menu) =>{
-            console.log("设置 菜单setMenu:%o", menu);
             commit('setMenu', menu);
         },
         /**获取 菜单 */

@@ -7,9 +7,11 @@
                 <span class="author">{{chapter.writer}}</span>
             </Row>
         </Row>
-        <pre>
-            <Row v-html="chapter.content"></Row>
-        </pre>
+        <Row class="content">
+            <pre>
+                <Row v-html="chapter.content"></Row>
+            </pre>
+        </Row>
     </div>
 </template>
 <script>
@@ -74,9 +76,12 @@ export default {
         .title{
             font-size: 20px;
             font-weight: bold;
-            margin-bottom: 8px;
+            height: 50px;
+            line-height: 50px;
         }
         .msg{
+            height: 30px;
+            line-height: 30px;
             margin-bottom: 8px;
             .time{
                 color: #858585;
@@ -88,6 +93,8 @@ export default {
             }
         }
     }
-    
+    .content{
+        padding: 10px;
+    }
 }
 </style>

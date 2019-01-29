@@ -1,14 +1,14 @@
 <template>
     <Row class="content">
-        <Form :model="formItem" :label-width="120">
-            <FormItem label="文章标题">
+        <Form :model="formItem" :label-width="120" :rules="formRules">
+            <FormItem label="文章标题" prop="chapTitle">
                 <Input v-model="formItem.chapTitle" placeholder="请输入文章标题"></Input>
             </FormItem>
-            <FormItem label="文章分类" >
+            <FormItem label="文章分类" prop="curCategory">
                 <Select v-model="formItem.curCategory" style="width:200px" @on-change="catChanged" :label-in-value="labelValue" :transfer="labelValue">
                     <Option v-for="item in categoryList" :value="item.cat_code" :key="item.cat_id">{{ item.cat_name }}</Option>
                 </Select>
-                <Button type="success" @click="addCategory">新增分类</Button>
+                <Button type="primary" @click="addCategory">新增分类</Button>
                 <Modal v-model="showAddCategory" @on-ok="saveCategory" title="新增分类">
                     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline :label-width="120">
                         <FormItem prop="categoryName" label="分类名称">
@@ -59,6 +59,10 @@ export default {
     },
     data(){
         return {
+            formRules: {
+                chapTitle: { required: true, trigger: 'blur',message: '文章标题不能为空'},
+                curCategory: { required: true, trigger: 'change',message: '文章分类不能为空'},
+            },
             topNav: [],
             subMenus: [],
             config: {

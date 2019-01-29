@@ -2,88 +2,74 @@
     <div class="layout">
         <Layout>
             <Header>
-                <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo">
-                        <div class="logo"></div>
-                    </div>
-                    <div class="layout-nav">
-                        <MenuItem v-for="(item,index) in topNav" :name="index+1" @click.native="selected(item,index)" 
-                          :class="{'ivu-menu-item-active ivu-menu-item-selected':curTopNav.navIdx == index}" :key="index">
-                            <Icon :type="item.icon"></Icon>
-                            {{item.cat_name}}
-                        </MenuItem>
-                    </div>
-                    <div class="login-info">
-                        <!-- <Tooltip placement="bottom">
-                            <Row class="palcemaent">
-                                <Badge dot style="margin:0px 10px;">
-                                    <Icon type="ios-bell-outline" size="26"></Icon>
-                                </Badge>
-                            </Row>
-                            <div slot="content">
-                                <Row class="account-info">
-                                    暂无消息
+                <Row class="header">
+                    <section class="logo">
+                        <section class="avater">
+                            <Icon type="social-twitch-outline" size=36></Icon>
+                        </section>
+                        <section class="title">前端编码规范</section>
+                    </section>
+                    <section class="msg-status">
+                        <Row class="logout" @click.native="login" v-if="accessToken">
+                            <img :src="loginImg" />
+                        </Row>
+                        <Row class="logout" @click.native="login" v-else="!accessToken">
+                            <img :src="loginImg" />
+                        </Row>
+                        <!-- <section class="user-login">
+                            <Avatar icon="person" size="large" />
+                            {{userName}}
+                        </section>
+                        <section class="spliter-line"></section>
+                        <section class="status">
+                            <Icon type="ios-person" size=24></Icon>
+                            <section class="status-text">在线</section>
+                        </section>
+                        <section class="unread-msg">
+                            <Tooltip placement="bottom" transfer>
+                                <Row class="palcemaent">
+                                    <Badge dot>
+                                        <Icon type="android-volume-up" size=24></Icon>
+                                    </Badge>
                                 </Row>
-                            </div>
-                        </Tooltip> -->
-                        <Tooltip placement="bottom">
-                            <Row class="palcemaent">
-                                <img v-if="userLogo" :src="userLogo" style="width:32px;height:32px;vertical-align:middle;margin-right:10px;border-radius:50%;" />
-                                <Avatar v-else style="background-color: #87d068" icon="person" />
-                                <span class="user-name">{{userName}}</span>
-                            </Row>
-                            <div slot="content">
-                                <Row class="account-info modify" @click.native="modifyPwd('popup')">修改密码</Row>
-                                <Modal v-model="pwdModal" title="修改密码">
-                                    <Row class="pwd-input">
-                                        <Input type="password" v-model="srcPwd" placeholder="输入原密码"/>
+                                <div slot="content">
+                                    <Row class="account-info">
+                                        暂无消息
                                     </Row>
-                                    <Row class="pwd-input">
-                                        <Input type="password" v-model="rePwd" placeholder="输入修改后密码（6-16位数字或字母）"/>
-                                    </Row>
-                                    <Row class="pwd-input">
-                                        <Input type="password" v-model="reRePwd" placeholder="再次输入修改后密码"/>
-                                    </Row>
-                                    <div slot="footer">
-                                        <Button @click="modifyPwd('save')" type="primary">修改密码</Button>
-                                    </div>
-                                </Modal>
-                                <Row class="account-info" @click.native="logout">退出账户</Row>
-                            </div>
-                        </Tooltip>
-                    </div>
-                </Menu>
+                                </div>
+                            </Tooltip>
+                        </section> -->
+                    </section>
+                </Row>
             </Header>
-            <Layout>
-                <Sider hide-trigger :style="{background: '#fff',width: '300px',maxWidth:'300px',minWidth:'300px'}">
-                    <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']" class="slide-menu">
-                        <Submenu name="1" v-for="(item,index) in curSubMenus" class="submenu" :key="index">
-                            <template v-if="item.children && item.children.length> 0">
-                                <template slot="title" >
-                                    <Icon :type="item.icon"></Icon>
-                                    {{item.name}}
-                                </template>
-                                <template>
-                                    <MenuItem v-for="(sitem,sindex) in item.children" :name="sitem.name" :key="sindex"
-                                    @click.native="goto(sitem,sindex)" :class="{'ivu-menu-item-active ivu-menu-item-selected':curSubMenuAddress == item.menuAddress}">{{sitem.name}}</MenuItem>
-                                </template>
+            <Layout :style="{minHeight: '100vh'}">
+                <Sider collapsible :collapsed-width="60" v-model="isCollapsed" :style="!isCollapsed?'width:240px;max-width:240px;min-width:240px;':''">
+                    <Menu :active-name="activeName" theme="light" width="auto" :open-names="openNames" ref="omsMenu">
+                        <Submenu :name="item.cat_code" v-for="(item,index) in topNav" :key="index"
+                             class="submenu" 
+                             :style="isCollapsed?'text-overflow:ellipsis;white-space:nowrap;overflow:hidden;':''">
+                            <template slot="title" >
+                                <Row class="submenu-title" @click.native="selected(item,index)" 
+                                    :style="isCollapsed?'text-overflow:ellipsis;white-space:nowrap;overflow:hidden;':''">
+                                    <Icon :type="menuIcons[item.cat_code]?menuIcons[item.cat_code]:'ionic'"></Icon>
+                                    {{isCollapsed?'':item.cat_name}}
+                                </Row>
                             </template>
-                            <template v-else>
-                                <template slot="title">
-                                    <span @click="goto(item,index)" class="submenu-title"
-                                        :class="{'ivu-menu-item-active ivu-menu-item-selected':curSubMenuAddress == item.chapter_id}">
-                                        <Icon :type="item.icon"></Icon>
-                                        {{item.chapter_title}}
-                                    </span>
-                                </template>
-                            </template>
+                            <MenuItem :name="sitem.chapter_id" v-for="(sitem,sindex) in item.children" 
+                                @click.native="goto(sitem,sindex)" :key="sindex">
+                                {{isCollapsed?'':sitem.chapter_title}}
+                            </MenuItem>
                         </Submenu>
                     </Menu>
                 </Sider>
-                <Layout :style="{padding: '0 20px 24px'}">
-                    <Content :style="{minHeight: '280px'}" class="lcontent">
+                <Layout :style="{padding: '0 0px 20px'}">
+                    <Breadcrumb :style="{margin: '20px',padding: '10px 20px',textAlign: 'left',background: 'white'}">
+                        <BreadcrumbItem :to="curTopNav.menuAddress">{{curTopNav.cat_name}}</BreadcrumbItem>
+                        <BreadcrumbItem :to="curSubMenu.menuAddress">{{curSubMenu.chapter_title}}</BreadcrumbItem>
+                        <!-- <BreadcrumbItem>index</BreadcrumbItem> -->
+                    </Breadcrumb>
+                    <Content :style="{minHeight: '280px',margin: '0px 20px'}">
                         <router-view />
-                        <!-- <Row v-html="curChapterContent"></Row> -->
                     </Content>
                 </Layout>
             </Layout>
@@ -93,19 +79,40 @@
 </template>
 <script>
 import kfApi from '../../service/kfApi';
-import {Headers} from '../common/Consts.js';
+import Login from '../../service/loginApi';
+import {Headers, menuIcons} from '../common/Consts.js';
 import crypto from 'crypto';
+import * as menuConfig from '../../../config/menu.config.js'
+import router from '../../router';
 export default {
     name: 'Index',
     data(){
         return {
+            loginImg: '',
+            menuIcons: {},
+            curTopNav:{
+                menuName: '',
+                menuCode: '',
+                index: -1
+            },
+            curSubMenu: {
+                menuName: '',
+                menuCode: '',
+                menuAddress: '',
+                index: -1
+            },
+            openNames: [],
+            activeName: '',
+            isCollapsed: false,
+            topNav: [],
+            subMenus: [],
             // curChapterContent: '',
             showMask: false,
             srcPwd: '',
             rePwd: '',
             reRePwd: '',
             pwdModal: false,
-            curTopNav:{
+            curTopNav: {
                 navCode: '',
                 navIdx: 0
             },
@@ -121,11 +128,9 @@ export default {
                 return this.$store.state.menu;
             },
             set(val){
+                
                 this.$store.dispatch('setMenu', val);
             }
-        },
-        userLogo(){
-            return this.$store.state.userLogo; 
         },
         userName: {
             get(){
@@ -135,24 +140,57 @@ export default {
                 this.$store.dispatch('setUserName', val)
             }
         },
-        password: {
+        accessToken: {
             get(){
-                return this.$store.state.password;
+                this.loginImg = this.$store.state.accessToken?require('../../../static/i/home/logout.png'):require('../../../static/i/home/login.png')
+                return this.$store.state.accessToken;
             },
-            set(val){
-                this.$store.dispatch('setPassword', val)
-            }
-        },
-        remember:{
-            get(){
-                return this.$store.state.remember;
-            },
-            set(val){
-                this.$store.dispatch('setRemember', val);
+            set() {
+                this.loginImg = this.$store.state.accessToken?require('../../../static/i/home/logout.png'):require('../../../static/i/home/login.png')
+                this.$store.dispatch('setAccessToken', val);
             }
         }
     },
     methods:{
+        login(){
+            this.$store.dispatch('setAccessToken', '');
+            this.$router.push({
+                path: '/'
+            })
+        },
+        /**加载菜单icon */
+        loadMenuIcon(){
+            this.menuIcons = menuIcons;
+        },
+        /**获取分类 */
+        async getCategoryList(){
+            let config = {
+                data: {},
+                headers: Headers.urlencoded
+            },_this = this;
+            return await Login.queryAllCategory(config).then(res =>{
+                if(res.code == '0'){
+                    _this.topNav= res.data
+                }
+                return res;
+            }, err=>{
+                return err;
+            })
+        },
+        async getAllChapters(){
+            let config = {
+                data: {},
+                headers: Headers.urlencoded
+            },_this = this;
+            return await Login.queryAllChapters(config).then(res =>{
+                if(res.code == '0'){
+                    _this.subMenus= res.data
+                }
+                return res;
+            }, err=>{
+                return err;
+            })
+        },
         /**重置密码 */
         resetPwd(){
             var _this = this;
@@ -209,41 +247,124 @@ export default {
             })
         },
         //顶级菜单单击事件
-        selected(topNav, index){
-            this.curTopNav.navCode = topNav.cat_code;
-            this.curTopNav.navIdx = index;
+        selected(menu, index){
+            this.curTopNav = menu;
+            this.curTopNav.index = index;
+            if(this.curTopNav.children && this.curTopNav.children.length > 0){
+                this.curSubMenu = this.curTopNav.children[0];
+                this.curSubMenu.index = 0;
+            }
             
-            this.curSubMenus = this.menu.subMenus.filter((i,x) =>{
-                return i.cat_code == this.curTopNav.navCode;
-            });
-            this.$router.push(
-                {
-                    path: 'content'
-                }
-            )
+            // this.$router.push(
+            //     {
+            //         path: menu.menuAddress
+            //     }
+            // )
         },
-        goto(item,index){
-            this.curSubMenuAddress = item.chapter_id;
+        goto(menu, index){
+            this.curSubMenu = menu;
+            this.curSubMenu.index = index;
             this.$router.push(
                 {
-                    path: 'detail',
-                    query: {
-                        chapterId: item.chapter_id
-                    }
+                    path: '/contentmanage/detail?chapterId=' + menu.chapter_id,
                 }
             )
-            // this.curChapterContent = item.chapter_content;
+        }, 
+        /**映射父子菜单 */
+        mapMenu(){
+            this.topNav = this.menu.topNav;
+            this.subMenus = this.menu.subMenus;
+            /**设置topNav的子菜单 */
+            this.topNav.map((item,index) =>{
+                item.children = [];
+                this.subMenus.map((i,x) =>{
+                    if(i.cat_code == item.cat_code){
+                        item.children.push(i);
+                    }
+                })
+            })
+            console.log("映射父子菜单this.topNav:%o", this.topNav);
+        },
+        /**过滤路由，使面包屑导航时正确显示父子菜单名称 */
+        filterRouter(){
+            let _this = this;
+            router.beforeEach((to, from, next) => {
+                if(to.redirectedFrom){
+                    _this.menu.topNav.map((pi,px) =>{
+                        if(to.path.indexOf(pi.menuAddress) > -1){
+                           
+                            _this.curTopNav = pi;
+                            _this.curSubMenu = pi.children[0];
+                            _this.$nextTick(()=>{
+                                _this.activeName = pi.children[0].menuCode;
+                                _this.openNames = [pi.menuCode];
+                                _this.$refs.omsMenu.currentActiveName = _this.activeName;
+                            })
+                            _this.curSubMenu.index = 0;
+                        }
+                    })
+                }
+                else{
+                    _this.menu.subMenus.map((i,x)=>{
+                        if(i.menuAddress == to.path){
+                            _this.curSubMenu = i;
+                        }
+                    });
+                    _this.menu.topNav.map((pi,px) =>{
+                        if(_this.curSubMenu.parentCode == pi.menuCode){
+                            _this.curTopNav = pi;
+                        }
+                    })
+                }
+                next();
+            })
+        },
+        /**设置当前父子菜单信息 */
+        setCurMenu(){
+            let path = this.$route.path;//浏览器中的路由
+            this.curSubMenu.menuAddress = path;
+            let hasTop = false;//包含topMenu
+            this.topNav.map((item,index) =>{
+                if(path.indexOf(item.menuAddress) > -1){
+                    this.curTopNav = item;
+                    this.curTopNav.index = index;
+                    let childIndex = -1;
+                    this.curTopNav.children.map((i,x) =>{
+                        if(path == i.menuAddress){
+                            childIndex = x;
+                        }
+                    })
+                    this.curSubMenu = this.curTopNav.children[childIndex];
+                    hasTop = true;
+                }
+            });
+            if(!hasTop){
+                this.topNav.map((item,index) =>{
+                    if(index == 0){
+                        this.curTopNav = item;
+                        this.curTopNav.index = index;
+                        this.selected(item, index);
+                    }
+                });
+            }
         }
     },
     mounted(){
-        this.topNav = this.menu.topNav || [];
-        this.subMenus = this.menu.subMenus || [];
-        this.topNav.map((item,index) =>{
-            if(index == 0){
-                this.selected(item, index);
-            }
-        });
-        
+        this.getCategoryList().then( res=>{
+            this.getAllChapters().then(res =>{
+                this.menu = {
+                    topNav: this.topNav,
+                    subMenus: this.subMenus
+                }
+                this.filterRouter();
+                this.loadMenuIcon();
+                this.mapMenu();
+                this.setCurMenu();
+            })
+        },err =>{
+            this.$Message.error('获取分类失败:%o', err);
+        })
+        console.log("当前token:%s", this.accessToken);
     }
 }
 </script>
@@ -251,39 +372,158 @@ export default {
 @import url('../../assets/c/index.less');
 </style>
 <style lang="less">
-.pwd-input{
-    margin: 10px 20px;
-}
-.ivu-menu-vertical{
-    margin-top: 40px;
-    .submenu{
-        .ivu-icon-ios-arrow-down:before{
-            content: '';
+.layout{
+    min-width: 750px;
+    overflow: scroll;
+    .header{
+        height: 80px;
+        line-height: 80px;
+        overflow: hidden;
+        
+        .logo{
+            float: left;
+            min-width: 300px;
+            .avater{
+                text-align: center;
+                width: 64px;
+                float: left;
+                margin: 10px 0px;
+                height: 60px;
+            }
+            .title{
+                font-size: 30px;
+            }
         }
-        .submenu-title{
-            display: inline-block;
-            width: 100%;
-            height: 60px;
-            line-height: 60px;
-            text-align: center;
-            font-size: 16px;
-        }
-    }
-    .submenu{
-        .ivu-menu-submenu-title{
-            padding: 0px;
+        .msg-status{
+            .logout,.login{
+                float: right;
+                cursor: pointer;
+                img{
+                    width: 32px;
+                    height: 32px;
+                }
+            }
+            width: 25%;
+            min-width: 450px;
+            float: right;
+            height: 80px;
+            overflow: hidden;
+            .user-login,.spliter-line{
+                float: right;
+            }
+            .spliter-line{
+                width: 1px;
+                background: #DFE6E5;
+                height: 40px;
+                margin: 20px 20px 0px 0px;
+            }
+            .unread-msg,.status,.logout,.login{
+                width: 100px;
+                height: 80px;
+                line-height: 90px;
+                float: right;
+                text-align: center;
+            }
+            .status{
+                i{
+                    float: left;
+                    height: 80px;
+                    line-height: 80px;
+                    margin: 0px 10px 0px 20px;
+                }
+                .status-text{
+                    float: left;
+                    height: 80px;
+                    line-height: 80px;
+                }
+            }
+            .unread-msg{
+                text-align: right;
+                padding-right: 10px;
+            }
+            .user-login{
+                padding: 0px 10px;
+                span{
+                    margin-right: 10px;
+                }
+            }
         }
     }
     
-}
-.layout{
-    .lcontent{
+    .content-title{
         text-align: left;
-        background-color: white;
-        padding:20px;
+        padding-left: 20px;
+    }
+    .pwd-input{
+        margin: 10px 20px;
+    }
+    .ivu-menu-vertical{
+        margin-top: 40px;
+        .submenu{
+            border-bottom: 1px solid #3DE0D8;
+            .ivu-icon-ios-arrow-down{
+                top: 23px;
+            }
+            .submenu-title{
+                display: inline-block;
+                width: calc(100% - 20px);
+                height: 60px;
+                line-height: 60px;
+                text-align: left;
+                padding: 0px 20px;
+                font-size: 16px;
+            }
+            .ivu-menu-submenu-title{
+                padding: 0px;
+                height: 60px;
+                overflow: hidden;
+            }
+        }
+        .submenu.ivu-menu-opened{
+            .ivu-menu-submenu-title{
+                border-right: none;
+                border-left: 4px solid white;
+                background: #3DE0D8;
+                color: white;
+            }
+        }
+    }
+    .ivu-menu-light.ivu-menu-vertical{
+        text-align: left;
+    }
+    .ivu-menu-light.ivu-menu-vertical {
+        .ivu-menu-item-active:not(.ivu-menu-submenu){
+            background: #3DE0D8;
+            color: white;
+        }
     }
     .ivu-menu-dark.ivu-menu-horizontal .ivu-menu-item:hover{
         color: #13c27c;
+    }
+    .ivu-layout-sider-trigger{
+        width: 240px !important;
+    }
+    .ivu-layout-sider-trigger.ivu-layout-sider-trigger-collapsed{
+        width: 50px !important;
+    }
+
+    /**自定义tab样式*/
+    .tabs-style > .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab{
+        border-radius: 0;
+        background: #fff;
+    }
+    .tabs-style > .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active{
+        border-top: 1px solid #3399ff;
+    }
+    .tabs-style > .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active:before{
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: #3399ff;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 }
 .mask{

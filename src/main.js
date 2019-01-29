@@ -35,7 +35,7 @@ Vue.use(VueWorker);
 router.beforeEach((to, from, next) => {
     
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-        if (store.state.token) {  // 通过vuex state获取当前的token是否存在
+        if (store.state.accessToken) {  // 通过vuex state获取当前的token是否存在
             next();
         }
         else {
@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
 /* eslint-disable no-new */
 
 import '../static/UE/ueditor.config.js'
-import '../static/UE/ueditor.all.js'
+import '../static/UE/ueditor.all.min.js'
 import '../static/UE/lang/zh-cn/zh-cn.js'
 import '../static/UE/ueditor.parse.js'
 
