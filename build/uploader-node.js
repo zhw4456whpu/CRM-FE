@@ -7,13 +7,14 @@ module.exports = flow = function(temporaryFolder) {
   var $ = this;
   $.temporaryFolder = temporaryFolder;
   $.maxFileSize = null;
-  $.fileParameterName = 'file';
+  $.fileParameterName = 'upfile';
 
   try {
     fs.mkdirSync($.temporaryFolder);
   } catch (e) {}
 
   function cleanIdentifier(identifier) {
+    
     return identifier!=undefined?identifier.replace(/[^0-9A-Za-z_-]/g, ''):'';
   }
 
@@ -89,16 +90,15 @@ module.exports = flow = function(temporaryFolder) {
   //'invalid_uploader_request', null, null, null
   //'non_uploader_request', null, null, null
   $.post = function(req, callback) {
-
     var fields = req.body;
     var files = req.files;
-
+    
     var chunkNumber = fields['chunkNumber'];
     var chunkSize = fields['chunkSize'];
     var totalSize = fields['totalSize'];
     var identifier = cleanIdentifier(fields['identifier']);
     var filename = fields['filename'];
-
+    console.log("uploader-node.js-> req.body:%o", req.body);
     if (!files[$.fileParameterName] || !files[$.fileParameterName].size) {
       callback('invalid_uploader_request', null, null, null);
       return;
@@ -109,8 +109,11 @@ module.exports = flow = function(temporaryFolder) {
     if (validation == 'valid') {
       var chunkFilename = getChunkFilename(chunkNumber, identifier);
 
+      console.log("files[$.fileParameterName].path:%s", files[$.fileParameterName].path);
+      console.log("chunkFilename:%s", chunkFilename);
       // Save the chunk (TODO: OVERWRITE)
-      fs.rename(files[$.fileParameterName].path, chunkFilename, function() {
+      fs.rename(files[$.fileParameterName].path, chunkFilename, function(err) {
+        console.log("fs.rename err:%o", err);
         // Do we have all the chunks?
         var currentTestChunk = 1;
         var numberOfChunks = Math.max(Math.floor(totalSize / (chunkSize * 1.0)), 1);
