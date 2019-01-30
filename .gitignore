@@ -3,3 +3,4 @@
 node_modules/
 src/xmpp/xmpp.config.js
 static/upfile
+config/

@@ -16,11 +16,10 @@
                         <Row class="logout" @click.native="login" v-else="!accessToken">
                             <img :src="loginImg" />
                         </Row>
-                        <!-- <section class="user-login">
-                            <Avatar icon="person" size="large" />
-                            {{userName}}
+                        <section class="user-login" v-show="accessToken">
+                            <Button type="primary" @click="addChapter" icon="edit">去发布</Button>
                         </section>
-                        <section class="spliter-line"></section>
+                        <!-- <section class="spliter-line"></section>
                         <section class="status">
                             <Icon type="ios-person" size=24></Icon>
                             <section class="status-text">在线</section>
@@ -152,6 +151,12 @@ export default {
         }
     },
     methods:{
+        /**去发布 */
+        addChapter(){
+            this.$router.push({
+                path: '/contentmanage/content'
+            })
+        },
         login(){
             this.$store.dispatch('setAccessToken', '');
             this.$router.push({
@@ -420,7 +425,7 @@ export default {
             .unread-msg,.status,.logout,.login{
                 width: 100px;
                 height: 80px;
-                line-height: 90px;
+                line-height: 100px;
                 float: right;
                 text-align: center;
             }

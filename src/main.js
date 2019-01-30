@@ -19,8 +19,7 @@ Vue.config.productionTip = false
 import uploader from 'vue-simple-uploader'
 import Upload from './components/common/Upload'
 import { debug } from 'util';
-import * as IM from './easemob'
-Vue.prototype.$IM = IM;
+
 //引入拖拽组件
 import VueDND from 'awe-dnd'
 
