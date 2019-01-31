@@ -58,6 +58,22 @@ export default {
         }
     },
     methods: {
+        /**查询分类和文章 */
+        queryCatNChapter(){
+            let _this = this;
+            _this.getCategoryList().then( res=>{
+                _this.getAllChapters().then(res =>{
+                    _this.menu = {
+                        topNav: _this.topNav,
+                        subMenus: _this.subMenus
+                    }
+                    this.selected();
+                    this.getChapterContent();
+                })
+            },err =>{
+                _this.$Message.error(err);
+            })
+        },
         /**获取分类 */
         async getCategoryList(){
             let config = {
@@ -131,12 +147,7 @@ export default {
         }
     },
     mounted(){
-        this.getCategoryList().then(res =>{
-            this.getAllChapters().then( response =>{
-                this.selected();
-                this.getChapterContent();
-            })
-        })
+        this.queryCatNChapter();
     }
 }
 </script>
