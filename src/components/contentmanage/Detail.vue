@@ -5,6 +5,7 @@
             <Row class="msg">
                 <span class="time">{{chapter.time}}</span>
                 <span class="author">{{chapter.writer}}</span>
+                <icon @click="edit" type="edit" style="color: #37CCC5;cursor: pointer;"></icon>
             </Row>
         </Row>
         <Row class="content">
@@ -20,7 +21,15 @@ export default {
     name: 'Detail',
     computed: {
         chapterId(){
-            return  this.$route.query.chapterId;
+            return  this.$store.state.chapterId;
+        },
+        chapterStatus: {
+            get(){
+                return this.$store.state.chapterStatus;
+            },
+            set() {
+                this.$store.dispatch('setChapterStatus', val);
+            }
         }
     },
     watch:{
@@ -39,6 +48,16 @@ export default {
         }
     },
     methods: {
+        /**编辑 */
+        edit(){
+            this.$store.dispatch('setChapterStatus', 'edit');
+            this.$router.push({
+                path: '/ContentManage',
+                params: {
+                    chapterId: this.chapterId
+                }
+            })
+        },
         getChapterContent(){
             let config = {
                 data:{

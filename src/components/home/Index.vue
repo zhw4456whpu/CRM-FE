@@ -148,11 +148,28 @@ export default {
                 this.loginImg = this.$store.state.accessToken?require('../../../static/i/home/logout.png'):require('../../../static/i/home/login.png')
                 this.$store.dispatch('setAccessToken', val);
             }
-        }
+        },
+        chapterId: {
+            get(){
+                return this.$store.state.chapterId;
+            },
+            set() {
+                this.$store.dispatch('setChapterId', val);
+            }
+        },
+        chapterStatus: {
+            get(){
+                return this.$store.state.chapterStatus;
+            },
+            set() {
+                this.$store.dispatch('setChapterStatus', val);
+            }
+        },
     },
     methods:{
         /**去发布 */
         addChapter(){
+            this.$store.dispatch('setChapterId', 0);
             this.$router.push({
                 path: '/contentmanage/content'
             })
@@ -269,9 +286,11 @@ export default {
         goto(menu, index){
             this.curSubMenu = menu;
             this.curSubMenu.index = index;
+            this.$store.dispatch('setChapterId', menu.chapter_id);
+            this.$store.dispatch('setChapterStatus', 'add');
             this.$router.push(
                 {
-                    path: '/contentmanage/detail?chapterId=' + menu.chapter_id,
+                    path: '/contentmanage/detail',
                 }
             )
         }, 

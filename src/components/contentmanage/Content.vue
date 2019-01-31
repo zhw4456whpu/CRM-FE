@@ -40,6 +40,7 @@ export default {
         Ueditor
     },
     computed: {
+        
         userName: {
             get(){
                 return this.$store.state.userName;
@@ -56,6 +57,23 @@ export default {
                 this.$store.dispatch('setMenu', val);
             }
         },
+        chapterId: {
+            get(){
+                console.log("this.$store.state.chapterId:%s", this.$store.state.chapterId);
+                return this.$store.state.chapterId;
+            },
+            set() {
+                this.$store.dispatch('setChapterId', val);
+            }
+        },
+        chapterStatus: {
+            get(){
+                return this.$store.state.chapterStatus;
+            },
+            set() {
+                this.$store.dispatch('setChapterStatus', val);
+            }
+        }
     },
     data(){
         return {
@@ -90,6 +108,28 @@ export default {
         }
     },
     methods: {
+        /**获取文章内容 */
+        getChapterContent(){
+            let config = {
+                data:{
+                    chapterId: this.chapterId
+                }
+            }
+            Content.queryChapterContent(config).then(res =>{
+                if(res.code == '0'){
+                    if(res.data[0]){
+                        this.formItem.chapTitle = res.data[0].chapter_title;
+                        this.formItem.curCategory = res.data[0].cat_code;
+                        this.formItem.chapContent = res.data[0].chapter_content;
+                    }
+                }
+                else{
+                    this.$Message.warning(res.message);
+                }
+            }, err =>{
+                this.$Message.error(err);
+            })
+        },
         /**获取分类 */
         async getCategoryList(){
             let config = {
@@ -138,22 +178,44 @@ export default {
         },
         /**保存文章 */
         saveChapter(){
-            this.formItem.writer = this.userName;
-            let config = {
-                data: {...this.formItem},
-                headers: Headers.json
+            if(this.chapterStatus == 'add'){
+                this.formItem.writer = this.userName;
+                let config = {
+                    data: {...this.formItem},
+                    headers: Headers.json
+                }
+                Content.addChapter(config).then(res =>{
+                    if(res.code == '0'){
+                        this.$Message.info('新增成功!');
+                        this.queryCatNChapter();
+                    }
+                    else{
+                        this.$Message.warning(res.message);
+                    }
+                }, err=>{
+                    this.$Message.error(err);
+                })
+            }else{
+                this.formItem.writer = this.userName;
+                let config = {
+                    data: {...this.formItem},
+                    headers: Headers.json
+                }
+                Object.assign(config.data, {chapterId: this.chapterId});
+                console.log("config.data:%o", config.data);
+                Content.editChapter(config).then(res =>{
+                    if(res.code == '0'){
+                        this.$Message.info('新增成功!');
+                        this.queryCatNChapter();
+                    }
+                    else{
+                        this.$Message.warning(res.message);
+                    }
+                }, err=>{
+                    this.$Message.error(err);
+                })
             }
-            Content.addChapter(config).then(res =>{
-                if(res.code == '0'){
-                    this.$Message.info('新增成功!');
-                    this.queryCatNChapter();
-                }
-                else{
-                    this.$Message.warning(res.message);
-                }
-            }, err=>{
-                this.$Message.error(err);
-            })
+            
         },
         /**打开新增窗口 */
         addCategory(){
@@ -182,6 +244,7 @@ export default {
     },
     mounted(){
         this.queryCatNChapter();
+        this.getChapterContent();
         this.categoryList = this.menu.topNav;
     }
 }

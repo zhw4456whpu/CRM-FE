@@ -132,6 +132,22 @@ router.post('/addChapter', (req, res) => {
         }
     })
 });
+// 修改文章接口
+router.post('/editChapter', (req, res) => {
+    var sql = $sql.chapter.edit;    
+    var params = req.body; 
+    console.log("修改文章接口 sql",sql);
+    console.log("修改文章接口 params",params);
+    conn.query(sql, [params.chapTitle, params.writer, params.chapContent, params.curCategory, params.chapterId], function(err, result) {    
+        if (err) {       
+            console.log(err);
+        }
+        if (result) {
+            jsonWrite(res, result);
+            res.end('is over');
+        }
+    })
+});
 // 上传文件接口
 // router.post('/upload*', multipartMiddleware, function(req, res) {
     

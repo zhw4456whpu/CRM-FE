@@ -5,8 +5,8 @@
 </template>
 <script>
 export default {
-    name:'Ueditor',
-    data:function () {
+    name: 'Ueditor',
+    data: function () {
         return{
             editor:''
         }
@@ -14,17 +14,17 @@ export default {
     props: {
         config: {
             type: Object,
-            default:function () {
+            default: function () {
                 return  {
                     initialFrameWidth: null,
                     initialFrameHeight: 350,
                 }
             }
         },
-        value:String
+        value: String
     },
-    mounted:function () {
-        this.editor=UE.getEditor("editor",this.config)
+    mounted: function () {
+        this.editor= UE.getEditor("editor", this.config)
         this.editor.addListener("ready", ()=>{
             this.editor.setContent(this.value); // 确保UE加载完成后，放入内容。
  
@@ -34,7 +34,7 @@ export default {
         });
     },
     methods: {
-        getUEContent:function() {
+        getUEContent: function() {
             return this.editor.getContent()
         }
     },
