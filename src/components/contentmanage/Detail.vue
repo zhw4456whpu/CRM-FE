@@ -30,7 +30,16 @@ export default {
             set() {
                 this.$store.dispatch('setChapterStatus', val);
             }
-        }
+        },
+        menu :{
+            get(){
+                return this.$store.state.menu;
+            },
+            set(val){
+                
+                this.$store.dispatch('setMenu', val);
+            }
+        },
     },
     watch:{
         chapterId(newVal, oldVal){
@@ -48,6 +57,14 @@ export default {
         }
     },
     methods: {
+        /**默认选中第一篇文章 */
+        selected(){
+            this.curTopNav = this.menu.topNav[0];
+            if(this.curTopNav.children && this.curTopNav.children.length > 0){
+                this.curSubMenu = this.curTopNav.children[0];
+                this.$store.dispatch('setChapterId', this.curSubMenu.chapter_id);
+            }
+        },
         /**编辑 */
         edit(){
             this.$store.dispatch('setChapterStatus', 'edit');
@@ -84,6 +101,7 @@ export default {
         }
     },
     mounted(){
+        this.selected();
         this.getChapterContent();
     }
 }
