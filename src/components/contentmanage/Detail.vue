@@ -17,6 +17,7 @@
 </template>
 <script>
 import Content from '../../service/contentApi';
+import Login from '../../service/loginApi';
 export default {
     name: 'Detail',
     computed: {
@@ -57,6 +58,35 @@ export default {
         }
     },
     methods: {
+        /**获取分类 */
+        async getCategoryList(){
+            let config = {
+                data: {},
+                headers: Headers.urlencoded
+            },_this = this;
+            return await Login.queryAllCategory(config).then(res =>{
+                if(res.code == '0'){
+                    _this.topNav= res.data
+                }
+                return res;
+            }, err=>{
+                return err;
+            })
+        },
+        async getAllChapters(){
+            let config = {
+                data: {},
+                headers: Headers.urlencoded
+            },_this = this;
+            return await Login.queryAllChapters(config).then(res =>{
+                if(res.code == '0'){
+                    _this.subMenus= res.data
+                }
+                return res;
+            }, err=>{
+                return err;
+            })
+        },
         /**默认选中第一篇文章 */
         selected(){
             this.curTopNav = this.menu.topNav[0];
@@ -101,8 +131,12 @@ export default {
         }
     },
     mounted(){
-        this.selected();
-        this.getChapterContent();
+        this.getCategoryList().then(res =>{
+            this.getAllChapters().then( response =>{
+                this.selected();
+                this.getChapterContent();
+            })
+        })
     }
 }
 </script>
