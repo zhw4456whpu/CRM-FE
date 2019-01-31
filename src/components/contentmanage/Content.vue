@@ -205,7 +205,7 @@ export default {
                 console.log("config.data:%o", config.data);
                 Content.editChapter(config).then(res =>{
                     if(res.code == '0'){
-                        this.$Message.info('新增成功!');
+                        this.$Message.info('编辑成功!');
                         this.queryCatNChapter();
                     }
                     else{
