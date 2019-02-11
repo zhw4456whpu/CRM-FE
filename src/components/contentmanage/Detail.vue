@@ -37,7 +37,6 @@ export default {
                 return this.$store.state.menu;
             },
             set(val){
-                
                 this.$store.dispatch('setMenu', val);
             }
         },

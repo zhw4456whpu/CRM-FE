@@ -114,20 +114,22 @@ export default {
                 data:{
                     chapterId: this.chapterId
                 }
-            }
+            }, _this = this;
             Content.queryChapterContent(config).then(res =>{
                 if(res.code == '0'){
                     if(res.data[0]){
-                        this.formItem.chapTitle = res.data[0].chapter_title;
-                        this.formItem.curCategory = res.data[0].cat_code;
-                        this.formItem.chapContent = res.data[0].chapter_content;
+                        setTimeout(function(){
+                            _this.formItem.chapTitle = res.data[0].chapter_title;
+                            _this.formItem.curCategory = res.data[0].cat_code;
+                            _this.formItem.chapContent = res.data[0].chapter_content;
+                        }, 20)
                     }
                 }
                 else{
-                    this.$Message.warning(res.message);
+                    _this.$Message.warning(res.message);
                 }
             }, err =>{
-                this.$Message.error(err);
+                _this.$Message.error(err);
             })
         },
         /**获取分类 */

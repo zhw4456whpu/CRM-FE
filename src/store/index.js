@@ -20,7 +20,7 @@ export default new Vuex.Store({
         /**所有敏感词 */
         allSensitiveWords: [],
         /**文章id */
-        chapterId: '',
+        chapterId: '1',
         chapterStatus: '',
         accessToken: ''
     },
